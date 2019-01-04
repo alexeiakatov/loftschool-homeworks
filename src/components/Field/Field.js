@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 export default class Field extends Component {
 
     render() {
-        console.log('in field: ', this.props);
         return (this.props.config.fieldName !== 'submit')
             ?
             (
