@@ -4,7 +4,7 @@ const showUrls = {
   bigBang: ' http://api.tvmaze.com/shows/66'
 };
 
-export const getShowInfo = showName => {
+const getShowInfo = showName => {
   const serialUrl = showUrls[showName];
   if (serialUrl == null) {
     throw new Error(
@@ -20,3 +20,5 @@ export const getShowInfo = showName => {
     }
   });
 };
+
+export default getShowInfo;
