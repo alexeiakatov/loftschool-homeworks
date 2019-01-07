@@ -30,90 +30,55 @@ export default class Form extends Component {
         isValidate: false
     };
 
-    constructor(props) {
-        super(props);
-        this.props.fields.forEach(el => el.onInputChange = this.onInputChange);
-    }
-
-    hasErrorStatuses = () => {
-        let hasErrors = [];
-
-        for (let fieldName in this.state) {
-            if (this.state[fieldName].isError) {
-                hasErrors.push(fieldName);
-            }
-        }
-        return hasErrors.length ? hasErrors : null;
-    };
-
-    clearErrorStatuses = (hasErrors) => {
-            this.setState((oldState, props) => {
-                hasErrors.forEach((fieldName) => {
-                    oldState[fieldName].isError = false;
-                    oldState[fieldName].errorMessage = '';
-                    });
-                    return oldState;
-                });
-    };
-
     onInputChange = (evt) => {
-            const fieldName = evt.target.name;
-            const newValue = evt.target.value;
-
-            // const hasErrors = this.hasErrorStatuses();
-
-            // нормально ли так делать?
-            // hasErrors && this.clearErrorStatuses(hasErrors);
+        const fieldName = evt.target.name;
+        const newValue = evt.target.value;
 
         this.setState((oldState, props) => {
-            return {[fieldName]: newValue};
-            // oldState[fieldName].value = newValue;
-            // return oldState;
+            return Object.keys(this.state.errors).length
+                ? {[fieldName]: newValue, errors: {}}
+                : {[fieldName]: newValue};
         });
     };
 
     onSubmitClick = (evt) => {
         evt.preventDefault();
         evt.stopPropagation();
-        this.validateAllFields() && this.setState((oldState, props) => oldState.isBond = true);
+        const errors = this.validateAllFields();
+        const isValidate = Object.keys(errors).length ? false : true;
+        this.setState((oldState, props) => {return {errors, isValidate}});
     };
 
     validateAllFields = () => {
-        let isValidCredentials = true;
-
-        for(const fieldName in this.state) {
-            const statusObject = this.state[fieldName];
-            const validationResult = statusObject.validator(statusObject.value);
-            if (validationResult.isError) {
-                isValidCredentials = false;
-                this.setState((oldState, props) => {
-                    oldState[fieldName].isError = validationResult.isError;
-                    oldState[fieldName].errorMessage = validationResult.errorMessage;
-                    return oldState;
-                    });
-            }
+        let errors = {};
+        for(let key in agentInfo) {
+            const infoObj = agentInfo[key];
+            if (this.state[key] === '') errors[key] = infoObj.errorEmpty;
+            else if (this.state[key] !== infoObj.correctValue) errors[key] = infoObj.errorInvalid;
         }
-        return isValidCredentials;
+
+        return errors;
     };
 
     render() {
-        const { firstName, lastName, password, errors } = this.state;
+        const { errors, isValidate } = this.state;
         const fields = this.props.fields;
 
-        if (!this.state.isBond) {
+        if (!isValidate) {
             return (
                 <form>
                     <h1>Введите свои данные, агент</h1>
                     {
-                        fields.map(el => {
-                                const inputValue = this.state[el.fieldName];
+                        fields.map(fieldConfig => {
+                                const fieldName = fieldConfig.fieldName;
+                                const inputValue = this.state[fieldName];
 
                                 return (<Field
-                                    key={el.fieldName}
-                                    config={el}
+                                    key={fieldName}
+                                    config={fieldConfig}
                                     value={inputValue}
-                                    // isError={statusObject.isError}
-                                    // errorMessage={statusObject.errorMessage}
+                                    onInputChange={this.onInputChange}
+                                    errorMessage={errors[fieldName]}
                                         />)
                         })
                     }

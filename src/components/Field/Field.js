@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 export default class Field extends Component {
 
     render() {
-        console.log('field re', this.props.value);
         const {containerClass,
             labelClass, labelText, labelTextClass,
-            inputClass, inputName, inputType, onInputChange
+            inputClass, inputName, inputType,
+            errorClass
         } = this.props.config;
 
-        const inputValue = this.props.value;
+        const { inputValue, onInputChange, errorMessage } = this.props;
 
         return (
                 <p className={containerClass}>
@@ -19,7 +19,7 @@ export default class Field extends Component {
 
                     <input className={inputClass} type={inputType} name={inputName} onChange={onInputChange} value={inputValue}/>
 
-                    <span className={this.props.config.errorClass}>{this.props.errorMessage}</span>
+                    <span className={errorClass}>{errorMessage}</span>
                 </p>
             )
     }
