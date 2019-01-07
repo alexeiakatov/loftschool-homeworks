@@ -9,37 +9,32 @@ export default class Chat extends Component {
     };
 
     sendMessageOnEnter = (evt) => {
-        if (evt.key === 'Enter') {
-            this.setState((oldState, props) => {
+        evt.key === 'Enter' &&
+        this.setState((oldState, props) => {
                 oldState.messages.push({text: oldState.messageInput});
-                oldState.messageInput = '';
-                return oldState;
+                return {messageInput: ''};
             });
-        }
     };
 
     changeInputMessage = (evt) => {
-        const newValue = parseInt(evt.target.value, 10);
-
-        this.setState((oldState, props) => {
-            oldState.messageInput = newValue;
-            return oldState;
-        });
+        this.setState({messageInput: evt.target.value});
     };
 
     render() {
+        const { messages, messageInput } = this.state;
+        const { changeInputMessage, sendMessageOnEnter } = this;
+
         return (
             <div className="chat">
                 <div className="message-list messages">
                     {
-                        this.state.messages.map((el, index) => {
-                                    return <Message text={el.text} key={index}/>})
+                        messages.map((el, index) => <Message text={el.text} key={index}/>)
                     }
                 </div>
                 <input className="input-message"
-                       value={this.state.messageInput}
-                       onChange={this.changeInputMessage}
-                       onKeyPress={this.sendMessageOnEnter}
+                       value={messageInput}
+                       onChange={changeInputMessage}
+                       onKeyPress={sendMessageOnEnter}
                 />
             </div>
         );
