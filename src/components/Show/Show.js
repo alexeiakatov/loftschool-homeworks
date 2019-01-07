@@ -20,7 +20,7 @@ export default class Show extends Component {
         const { showId } = this.props;
 
         prevState.showId !== showId &&
-        getShowInfo(propsShowId)
+        getShowInfo(showId)
             .then(
                 responseJson => {this.setState({data: responseJson});}
             );
