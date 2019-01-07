@@ -10,10 +10,10 @@ export default class Chat extends Component {
 
     sendMessageOnEnter = (evt) => {
         evt.key === 'Enter' &&
-        this.setState((oldState, props) => {
-                oldState.messages.push({text: oldState.messageInput});
-                return {messageInput: ''};
-            });
+            this.setState((state, props) => ({
+                messages: [ ...state.messages, {text: state.messageInput}],
+                messageInput: ''
+            }));
     };
 
     changeInputMessage = (evt) => {
