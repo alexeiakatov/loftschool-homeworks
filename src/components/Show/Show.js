@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import styles from "./Show.css";
-import getShowInfo from "../../api.js";
+import './Show.css';
+import getShowInfo from '../../api.js';
 
 export default class Show extends Component {
     /* data.name,
@@ -13,28 +13,21 @@ export default class Show extends Component {
     };
 
     static getDerivedStateFromProps = (nextProps, prevState) => {
-        return nextProps.showId === prevState.showId ? null : {showId: nextProps.showId};
-    };
-
-    setReceivedData = (responseJson) => {
-        this.setState((oldState, props) => {
-            oldState.data = responseJson;
-            return oldState
-        });
+        return (nextProps.showId === prevState.showId) ? null : {showId: nextProps.showId};
     };
 
     componentDidUpdate = (prevProps, prevState) => {
-        const propsShowId = this.props.showId;
+        const { showId } = this.props;
 
-        prevState.showId !== propsShowId &&
+        prevState.showId !== showId &&
         getShowInfo(propsShowId)
             .then(
-                (responseJson) => {this.setReceivedData(responseJson)}
-                );
+                responseJson => {this.setState({data: responseJson});}
+            );
     };
 
     render() {
-        const data = this.state.data;
+        const { data } = this.state;
 
         return (
             data ?
