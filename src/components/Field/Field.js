@@ -3,35 +3,24 @@ import React, { Component } from 'react';
 export default class Field extends Component {
 
     render() {
-        return (this.props.config.fieldName !== 'submit')
-            ?
-            (
-                <p className={this.props.config.containerClass}>
-                    <label className={this.props.config.labelClass} htmlFor={this.props.config.inputName}>
+        console.log('field re', this.props.value);
+        const {containerClass,
+            labelClass, labelText, labelTextClass,
+            inputClass, inputName, inputType, onInputChange
+        } = this.props.config;
 
-                        <span className="this.props.config.labelTextClass">
-                            {this.props.config.labelText}
-                        </span>
+        const inputValue = this.props.value;
 
+        return (
+                <p className={containerClass}>
+                    <label className={labelClass} htmlFor={inputName}>
+                        <span className={labelTextClass}>{labelText}</span>
                     </label>
 
-                    <input className={this.props.config.inputClass}
-                           type={this.props.config.inputType}
-                           name={this.props.config.inputName}
-                           defaultValue=''
-                           onChange={this.props.config.onInputChange}/>
+                    <input className={inputClass} type={inputType} name={inputName} onChange={onInputChange} value={inputValue}/>
 
                     <span className={this.props.config.errorClass}>{this.props.errorMessage}</span>
                 </p>
-            )
-            :
-            (
-                <div className={this.props.config.containerClass}>
-                    <input type={this.props.config.inputType}
-                           className={this.props.config.inputClass}
-                           value={this.props.config.inputValue}
-                           onClick={this.props.config.onSubmitClick}/>
-                </div>
             )
     }
 }

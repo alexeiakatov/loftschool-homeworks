@@ -3,28 +3,36 @@ import styles from "./Form.css";
 import Field from "../Field";
 import bondImage from "./assets/bond_approve.jpg";
 
+const agentInfo = {
+    firstName: {
+        correctValue: 'james',
+        errorInvalid: 'Имя указано не верно',
+        errorEmpty: 'Нужно указать имя'
+    },
+    lastName: {
+        correctValue: 'bond',
+        errorInvalid: 'Фамилия указана не верно',
+        errorEmpty: 'Нужно указать фамилию'
+    },
+    password: {
+        correctValue: '007',
+        errorInvalid: 'Пароль указан не верно',
+        errorEmpty: 'Нужно указать пароль'
+    }
+};
+
 export default class Form extends Component {
-    state = {};
+    state = {
+        firstName: '',
+        lastName: '',
+        password: '',
+        errors: {},
+        isValidate: false
+    };
 
     constructor(props) {
         super(props);
-        /* в state создаем статусные объекты в которых будем:
-         *   отслеживать значения в дочерних инпутах,
-         *   сохранять состояние ошибки и сообщение при ошибке.
-         *   хранить функцию-валидатор для конкретного инпута
-         * так же в констр-ре добавяем в конфигур объект (предназначенный) для полей формы обработчики из родительского
-         * компонента.*/
-        for(let fieldConfig of this.props.fields){
-            const fieldName = fieldConfig.fieldName;
-            if (fieldName !== 'submit') {
-                // создаем запись о статусе потомка в родитльском компоненте
-                this.state[fieldName] = {isError: false, errorMessage: '', value: '', validator: fieldConfig.validator};
-                // добавляем конфигурац объекту предназ-му для поля-потомка обработчик ввода в input.
-                fieldConfig.onInputChange = this.onInputChange;
-            } else {
-                fieldConfig.onSubmitClick = this.onSubmitClick;
-            }
-        }
+        this.props.fields.forEach(el => el.onInputChange = this.onInputChange);
     }
 
     hasErrorStatuses = () => {
@@ -52,14 +60,15 @@ export default class Form extends Component {
             const fieldName = evt.target.name;
             const newValue = evt.target.value;
 
-            const hasErrors = this.hasErrorStatuses();
+            // const hasErrors = this.hasErrorStatuses();
 
             // нормально ли так делать?
-            hasErrors && this.clearErrorStatuses(hasErrors);
+            // hasErrors && this.clearErrorStatuses(hasErrors);
 
         this.setState((oldState, props) => {
-            oldState[fieldName].value = newValue;
-            return oldState;
+            return {[fieldName]: newValue};
+            // oldState[fieldName].value = newValue;
+            // return oldState;
         });
     };
 
@@ -88,28 +97,32 @@ export default class Form extends Component {
     };
 
     render() {
+        const { firstName, lastName, password, errors } = this.state;
+        const fields = this.props.fields;
+
         if (!this.state.isBond) {
             return (
                 <form>
                     <h1>Введите свои данные, агент</h1>
                     {
-                        this.props.fields.map(el => {
-                            if (el.fieldName !== 'submit') {
-                                const statusObject = this.state[el.fieldName];
+                        fields.map(el => {
+                                const inputValue = this.state[el.fieldName];
+
                                 return (<Field
                                     key={el.fieldName}
                                     config={el}
-                                    isError={statusObject.isError}
-                                    errorMessage={statusObject.errorMessage}/>)
-
-                            } else {
-                                return (
-                                    <Field key={el.fieldName} config={el}/>
-                                )
-                            }
-
+                                    value={inputValue}
+                                    // isError={statusObject.isError}
+                                    // errorMessage={statusObject.errorMessage}
+                                        />)
                         })
                     }
+                    <div className="form__buttons">
+                        <input type="submit"
+                               className="button t-submit"
+                               value="Проверить"
+                               onClick={this.onSubmitClick}/>
+                    </div>
                 </form>
             );
         }
