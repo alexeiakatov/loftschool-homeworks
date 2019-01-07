@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from "./Show.css";
+import "./Show.css";
 import * as fetchApi from "../../api.js";
 
 export default class Show extends Component {
@@ -12,32 +12,21 @@ export default class Show extends Component {
         data: null
     };
 
-    setReceivedData = (responseJson, showId) => {
-        this.setState((oldState, props) => {
-            return {
-                showId: showId,
-                data: responseJson
-            };
-        });
-    };
+    componentDidMount = () => {
+        const showId = this.props.showId;
 
-    componentDidUpdate = (prevProps, prevState) => {
-        console.log('cdu');
-        const propsShowId = this.props.showId;
+        // почему в этом случае showId = undefined ??
+        // const { showId } = this.props.showId;
 
-        propsShowId !== this.state.showId &&
-        fetchApi.getShowInfo(propsShowId)
+        showId &&
+        fetchApi.getShowInfo(showId)
             .then(
-                (responseJson) => {this.setReceivedData(responseJson, propsShowId)}
+                (responseJson) => {this.setState({showId, data: responseJson})}
             );
     };
 
     render() {
-        console.log('re');
-        console.log('pr: ', this.props);
-        console.log('st: ', this.state);
-
-        const data = this.state.data;
+        const { data } = this.state;
 
         return (
             data ?
