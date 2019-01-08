@@ -15,6 +15,7 @@ const fields = [
   }
 ];
 
+/* на форму приходят: коллбэк авторизации и текст ошибки.*/
 class LoginForm extends PureComponent {
   state = {
     values: {
@@ -43,37 +44,40 @@ class LoginForm extends PureComponent {
     const { values } = this.state;
     const { authorizeError } = this.props;
 
-    return (
-      <div className="login-form">
-        <h1 className="login-form-title">Авторизация</h1>
+      return (
+          <div className="login-form">
+              <h1 className="login-form-title">Авторизация</h1>
 
-        {fields.map(({ id, label, type }) => (
-          <p key={id} className="field">
-            <label className="field__label" htmlFor={id}>
-              <span className="field-label">{label}</span>
-            </label>
-            <input
-              id={id}
-              className={`field__input field-input t-input-${id}`}
-              type={type}
-              name={id}
-              value={values[id]}
-              onChange={this.handleChange}
-            />
-          </p>
-        ))}
+              {/* рендрит список полей */}
+              {fields.map(({id, label, type}) => (
+                  <p key={id} className="field">
+                      <label className="field__label" htmlFor={id}>
+                          <span className="field-label">{label}</span>
+                      </label>
+                      <input
+                          id={id}
+                          className={`field__input field-input t-input-${id}`}
+                          type={type}
+                          name={id}
+                          value={values[id]}
+                          onChange={this.handleChange}
+                      />
+                  </p>
+              ))}
 
-        {authorizeError !== '' && (
-          <p className="login-form-error t-login-error">{authorizeError}</p>
-        )}
+              {/* отрисовыв сообщение об ошибке */}
+              {authorizeError !== '' && (
+                  <p className="login-form-error t-login-error">{authorizeError}</p>
+              )}
 
-        <div className="login-form__buttons">
-          <Button onClick={this.handleSubmit} className="t-login">
-            Войти
-          </Button>
-        </div>
-      </div>
-    );
+              {/*кнопка submit */}
+              <div className="login-form__buttons">
+                  <Button onClick={this.handleSubmit} className="t-login">
+                      Войти
+                  </Button>
+              </div>
+          </div>
+      );
   }
 }
 
