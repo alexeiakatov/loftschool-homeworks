@@ -4,47 +4,43 @@ import './Layout.css';
 
 class Layout extends PureComponent {
 
-  wrapInConsumer = (WrappedComponent) => {
-      const { Consumer } = this.props;
-      return class extends React.Component {
-          render () {
-            return (
-              <Consumer>
-                  {
-                      ({isAuthorized, email, logout}) => {
-                          if (WrappedComponent.name === 'Header') {
-                              return <WrappedComponent isAuthorized={isAuthorized} email={email} logout={logout}/>
-                          }
-                          else if (WrappedComponent.name === 'Footer') {
-                              return <WrappedComponent isAuthorized={isAuthorized} email={email}/>
-                          }
-                      }
-                  }
-              </Consumer>
-            )
-          }
-      }
-  };
-
   renderHeader(HeaderChild) {
 
-    return 'empty';
+      return HeaderChild ?
+          (<header className="header">
+              <SectionTitle className="header__title">Header</SectionTitle>
+              <div className="header__content">
+                  <HeaderChild/>
+              </div>
+          </header>)
+          : null;
   }
 
   renderFooter(FooterChild) {
-    return 'empty';
+      return FooterChild ?
+          (<footer className="footer">
+              <SectionTitle className="footer__title">Footer</SectionTitle>
+              <FooterChild/>
+          </footer>)
+          : null;
   }
 
     render() {
-        const {header, footer} = this.props;
-        const WrappedHeader = header ? this.wrapInConsumer(header) : null;
-        const WrappedFooter = footer ? this.wrapInConsumer(footer) : null;
+        const { header, footer, children } = this.props;
 
         return (
             <Fragment>
-                {WrappedHeader && <WrappedHeader/>}
-                  {this.props.children}
-                {WrappedFooter && <WrappedFooter/>}
+                {this.renderHeader(header)}
+
+                <main className={`main
+                        ${header ? 'main--with-header' : ''}
+                        ${footer ? 'main--with-footer' : ''}
+                        `}>
+                    <SectionTitle className="main__title">Main</SectionTitle>
+                    {children}
+                </main>
+
+                {this.renderFooter(footer)}
             </Fragment>
         )
     }
