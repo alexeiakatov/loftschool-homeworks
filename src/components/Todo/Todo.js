@@ -86,4 +86,4 @@ class Todo extends PureComponent {
   };
 }
 
-export default withLocalstorage('todo-app', [{text: 'first', status: 'x'}, {text: 'secont', status: 'x'}])(Todo);
+export default withLocalstorage('todo-app', [])(Todo);
