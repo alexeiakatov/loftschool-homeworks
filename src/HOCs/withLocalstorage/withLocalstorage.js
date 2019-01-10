@@ -23,15 +23,21 @@ const withLocalstorage = (displayName, initialArray) => {
                 }
             }
 
-            saveData = (text, status, todoId) => {
-                let newData;
+            saveData = (dataObj) => {
+                const { value, todoId, isToggle } = dataObj;
+                const { data } = this.state;
 
-                if (todoId) {
-                    const record = this.state.data[todoId];
+                let newData;
+                if (isToggle) {
+                    const index = data.reduce((prevRecord, curRecord, index) => {
+                                return (curRecord.todoId.toString() === todoId) ? index : prevRecord;
+                            },
+                            null);
+                    const record = data[index];
                     record.status = (record.status === ' ') ? 'x' : ' ';
-                    newData = [...this.state.data];
+                    newData = [...data];
                 } else {
-                    newData = [...this.state.data, {text, status}];
+                    newData = [...data, {value, status: ' ', todoId}];
                 }
                 save(this.localStorageKey, newData);
 
@@ -41,7 +47,8 @@ const withLocalstorage = (displayName, initialArray) => {
             };
 
             render() {
-                return <WrappedComponent saveData={this.saveData} savedData={this.state.data}/>
+                const { data } = this.state;
+                return <WrappedComponent saveData={this.saveData} savedData={data}/>
             }
         }
     }
