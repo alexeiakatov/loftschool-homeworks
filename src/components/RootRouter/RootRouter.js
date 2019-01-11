@@ -1,19 +1,20 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch } from '../../../node_modules/react-router-dom';
 import PrivateRoute from '../PrivateRoute';
-import LoginForm from '../LoginForm';
-import AppRouter from '../AppRouter';
 import { AuthProvider } from '../../context/Auth';
 import { DataProvider } from '../../context/Data';
 
-export default () => (
-  <DataProvider>
-    <AuthProvider>
-      <BrowserRouter>
-        <Switch>
-
-        </Switch>
-      </BrowserRouter>
-    </AuthProvider>
-  </DataProvider>
+const RootRouter = () => (
+    <DataProvider>
+        <AuthProvider>
+            <BrowserRouter>
+                <Switch>
+                    <PrivateRoute path="/" exact />
+                    <PrivateRoute path="/app" />
+                </Switch>
+            </BrowserRouter>
+        </AuthProvider>
+    </DataProvider>
 );
+
+export default RootRouter;

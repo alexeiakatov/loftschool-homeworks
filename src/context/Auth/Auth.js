@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 const { Provider, Consumer } = React.createContext('');
 
 class AuthProvider extends Component {
@@ -18,6 +19,10 @@ class AuthProvider extends Component {
     }
   };
 
+  logout = () => {
+
+  };
+
   getProviderValue = () => {
     const { isAuthorized, authError } = this.state;
     return { isAuthorized, authorize: this.authorize, authError };
@@ -32,6 +37,8 @@ class AuthProvider extends Component {
 const withAuth = WrappedComponent => {
   class AuthHOC extends Component {
     render() {
+      // все props, которые будут переданы в класс-обертку в jsx будут проброшены в обернутый компонент - ...rest плюс
+      //  обернутому будут переданы значения контекста. В данном случае контекста авторизации.
       const { ...rest } = this.props;
       return (
         <Consumer>
