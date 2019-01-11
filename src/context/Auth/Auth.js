@@ -37,7 +37,7 @@ class AuthProvider extends Component {
 const withAuth = WrappedComponent => {
   class AuthHOC extends Component {
     render() {
-      // все props, которые будут переданы в класс-обертку в jsx будут проброшены в обернутый компонент - ...rest плюс
+      // все props, которые будут переданы в класс-обертку в jsx будут проброшены в обернутый компонент - ...rest, плюс
       //  обернутому будут переданы значения контекста. В данном случае контекста авторизации.
       const { ...rest } = this.props;
       return (

@@ -3,8 +3,6 @@ import { Link } from '../../../node_modules/react-router-dom';
 
 export default class MailList extends Component {
 
-
-
     render() {
         const { data, listType } = this.props;
         const { path } = this.props.match;

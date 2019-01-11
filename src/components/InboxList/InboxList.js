@@ -6,6 +6,7 @@ import {withData} from "../../context/Data";
 
 class InboxList extends Component {
 
+    // пример, как передать доп props в компонент, который используешь в Route.
     specifyMailList = (props) => {
         const { inbox } = this.props.data;
         return <MailList {...props} data={inbox} listType="inbox"/>
