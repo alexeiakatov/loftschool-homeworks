@@ -6,14 +6,22 @@ import AppRouter from "../AppRouter/AppRouter";
 
 class PrivateRoute extends Component {
 
+    isNeedRedirect = (pathname) => {
+        return (pathname === '/' || pathname.indexOf('/app') !== 0);
+    };
+
     render() {
-        const { isAuthorized, path } = this.props;
+        const { isAuthorized } = this.props;
+
         return(
             <Route render={
                 (props) => {
+                    const { pathname } = props.location;
+
                     if (isAuthorized) {
-                        return (path !== '/app') ? <Redirect to="/app"/> : <AppRouter/>
+                        return this.isNeedRedirect(pathname) ? <Redirect to="/app" /> : <AppRouter/>;
                     }
+
                     return <LoginForm/>;
                 }
             }/>

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link } from '../../../node_modules/react-router-dom';
+import { Switch, Route, Link, Redirect } from '../../../node_modules/react-router-dom';
 import Home from '../Home';
 import InboxList from '../InboxList';
 import OutboxList from '../OutboxList';
+import InboxMail from "../InboxMail/InboxMail";
+import OutboxMail from "../OutboxMail/OutboxMail";
 
 export default class AppRouter extends Component {
 
@@ -24,9 +26,15 @@ export default class AppRouter extends Component {
                 </nav>
 
                 <Switch>
-                    <Route path="/app" exact component={Home} />
-                    <Route path="/app/inbox" component={InboxList} />
-                    <Route path="/app/outbox" component={OutboxList} />
+                    <Route path="/app" exact component={Home}/>
+
+                    <Route path="/app/inbox/:id" component={InboxMail}/>
+                    <Route path="/app/inbox" component={InboxList}/>
+
+                    <Route path="/app/outbox/:id" component={OutboxMail}/>
+                    <Route path="/app/outbox" component={OutboxList}/>
+
+                    <Redirect to="/app"/>
                 </Switch>
             </div>
         )

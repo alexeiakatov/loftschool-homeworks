@@ -4,8 +4,7 @@ import { Link } from '../../../node_modules/react-router-dom';
 export default class MailList extends Component {
 
     render() {
-        const { data, listType } = this.props;
-        const { path } = this.props.match;
+        const { data, listType, path } = this.props;
 
         return (
             <div className={`container t-${listType}-list`}>
